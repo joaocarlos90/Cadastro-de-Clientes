@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
+
 @RestController //com essa notation a classe ja sabe que e um controller e não e precisa fazer o body separado
 @RequestMapping("/api/clientes") //mapeia a url base dentro da controller
 public class ClienteController {
@@ -19,7 +21,7 @@ public class ClienteController {
 
     @PostMapping//mapeia o body com o front post
     @ResponseStatus(HttpStatus.CREATED) //retorna o status da do post
-    public Cliente salvar(@RequestBody Cliente cliente) {
+    public Cliente salvar(@RequestBody @Valid Cliente cliente) {
         return repository.save(cliente);
     }
 
@@ -37,12 +39,12 @@ public class ClienteController {
                     repository.delete(cliente);
                     return Void.TYPE;
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!"));
         //ou pode usar repository.deleteById(id);
     }
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateCliente(@PathVariable Integer id, @RequestBody Cliente clienteAtualizado){
+    public void updateCliente(@PathVariable @Valid Integer id, @RequestBody Cliente clienteAtualizado){
         repository
                 .findById(id)
                 .map(Cliente -> {
@@ -50,6 +52,6 @@ public class ClienteController {
                     Cliente.setCpf(clienteAtualizado.getCpf());
                     return repository.save(clienteAtualizado);//se retornar null cai no throw
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!"));
     }
 }
