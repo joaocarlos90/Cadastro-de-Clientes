@@ -32,7 +32,7 @@ public class ClienteController {
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT) //retorna o status da do post
-    public void deleteCliente(@PathVariable Integer id) {
+    public void deleteCliente(@PathVariable @Valid Integer id) {
         repository
                 .findById(id)
                 .map(cliente -> {
