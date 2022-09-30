@@ -11,6 +11,7 @@ import javax.validation.Valid;
 
 @RestController //com essa notation a classe ja sabe que e um controller e não e precisa fazer o body separado
 @RequestMapping("/api/clientes") //mapeia a url base dentro da controller
+@CrossOrigin("http://localhost:4200")
 public class ClienteController {
     private final ClienteRepository repository;
 
